@@ -6,26 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
         <Button
             android:id="@+id/quit_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="退出" />
-
         <Button
             android:id="@+id/dump_mp4_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:layout_toRightOf="@+id/quit_btn"
+            android:layout_marginLeft="10dp"
             android:text="开始录制" />
 
         <TextureView
             android:id="@+id/tv_camera"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-    </FrameLayout>
+    </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

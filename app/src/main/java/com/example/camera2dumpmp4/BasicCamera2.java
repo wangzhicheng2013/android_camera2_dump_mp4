@@ -61,7 +61,8 @@ public class BasicCamera2 {
     private int mFrameCount = 0;
     private long mProcessTime = 0;
     private static final int MAX_FRAME_COUNT = 100;
-
+    private static final int FRAME_RATE = 11;
+    private final boolean SPECIAL_DEVICE = false;
     public BasicCamera2(Context context, TextureView textureView) {
         mContext = context;
         mTextureView = textureView;
@@ -93,7 +94,7 @@ public class BasicCamera2 {
         if (null == mNv12toH264Encoder) {
             try {
                 Log.d(TAG, "get width:" + width + " height:" + height);
-                mNv12toH264Encoder = new AvcEncoderOnSynchronous(width, height, 30, width * height * 5, outPath);
+                mNv12toH264Encoder = new AvcEncoderOnSynchronous(width, height, FRAME_RATE, width * height * 5, outPath);
                 return true;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -258,7 +259,7 @@ public class BasicCamera2 {
                 if (message.what != 1) {
                     return false;
                 }
-                if (null == mByteNv12) {
+                if ((null == mByteNv12) && (true == SPECIAL_DEVICE)) {
                     mByteNv12 = new byte[mPreviewReader.getWidth() * mPreviewReader.getHeight() * 3 / 2];
                 }
                 long curTimeMillis = System.currentTimeMillis();
@@ -286,6 +287,10 @@ public class BasicCamera2 {
         });
     }
     private void getBytesForImage(final Image img) {
+        if (false == SPECIAL_DEVICE) {
+            mByteNv12 = YuvUtil.getBytesFromImageAsType(img, YuvUtil.YUV420SP, false);
+            return;
+        }
         int width = img.getWidth();
         int height = img.getHeight();
         int y_size = width * height;
